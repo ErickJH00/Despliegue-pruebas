@@ -1,5 +1,5 @@
 # backend/models/vehiculo.py
-from backend.core.db.connection import get_connection
+from core.db.connection import get_connection
 
 class Vehiculo:
     def __init__(self, id_vehiculo, placa, tipo, color, id_persona):
