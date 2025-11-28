@@ -683,3 +683,41 @@ def test_db():
 if __name__ == "__main__":
     print("✅ Servidor SmartCar ejecutándose en http://127.0.0.1:5000")
     app.run(host="127.0.0.1", port=5000, debug=True)
+
+# ===========================================================
+#  Integración de Blueprints y JWT Service
+# ===========================================================
+# Importar blueprints de personas y vehículos
+from routes.personas_routes import personas_bp
+from routes.vehiculos_routes import vehiculos_bp
+from core.routes.cars_routes import cars_bp
+from login_routes import login_bp
+
+# Registrar Blueprints
+app.register_blueprint(personas_bp)
+app.register_blueprint(vehiculos_bp)
+app.register_blueprint(cars_bp)
+app.register_blueprint(login_bp)
+
+# ===========================================================
+# Middleware para proteger rutas /api usando token JWT
+# ===========================================================
+@app.before_request
+def verificar_token():
+    if request.path.startswith("/api"):
+        # Evitamos proteger login
+        if request.path.startswith("/api/login") or request.path.startswith("/api/public"):
+            return
+
+        token = request.headers.get("Authorization")
+        if not token:
+            return jsonify({"error": "Token requerido"}), 401
+
+        token = token.replace("Bearer ", "")
+        try:
+            datos = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+            request.usuario_actual = datos
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "Token expirado"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Token inválido"}), 401
