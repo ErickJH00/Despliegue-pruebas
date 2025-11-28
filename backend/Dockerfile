@@ -1,21 +1,25 @@
 # ============================================================
-#  Dockerfile - Backend SmartCar (Flask)
+# Dockerfile - Backend SmartCar (Flask)
 # ============================================================
 
-# Imagen base de Python
-FROM python:3.11
+FROM python:3.11-slim
 
-# Crear el directorio de trabajo dentro del contenedor
+# Crear directorio dentro del contenedor
 WORKDIR /app
 
-# Copiar archivos del proyecto al contenedor
-COPY . /app
+# Copiar requirements primero para cache eficiente
+COPY requirements.txt .
 
-# Instalar dependencias necesarias
-RUN pip install --no-cache-dir flask flask-cors psycopg2-binary jwt reportlab openpyxl
+# Instalar dependencias del backend
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Exponer el puerto de Flask
+# Copiar el resto del backend
+COPY . .
+
+# Render usa PORT, así que lo respetamos
+ENV PORT=5000
+
 EXPOSE 5000
 
-# Comando por defecto para ejecutar el servidor
+# Ejecutar el servidor
 CMD ["python", "server.py"]
