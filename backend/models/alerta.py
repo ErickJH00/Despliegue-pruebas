@@ -1,10 +1,10 @@
-from core.db import get_db_connection
+from core.db.connection import get_connection
 
 def create_alerta(tipo, detalle, severidad, oid_acceso, oid_vigilante):
     """
     Registra una nueva alerta de seguridad.
     """
-    conn = get_db_connection()
+    conn = get_connection()
     if not conn:
         return None
 
