@@ -1,0 +1,36 @@
+# ============================================================
+#  docker-compose.yml - SmartCar
+# ============================================================
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    container_name: smartcar_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bd_carros
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./bd_carros.sql:/docker-entrypoint-initdb.d/bd_carros.sql
+
+  backend:
+    build: ./backend
+    container_name: smartcar_backend
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@db:5432/bd_carros
+
+volumes:
+  db_data:

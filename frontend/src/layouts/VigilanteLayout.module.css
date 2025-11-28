@@ -1,0 +1,48 @@
+.dashboardContainer {
+    width: 100%;
+    min-height: 100vh;
+    background: #f0f8ff;
+}
+
+.navbar {
+    width: 100%;
+    background: #ffffff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: solid 2px #8bd1ff;
+}
+
+.navLeft img {
+    height: 42px;
+}
+
+.navRight {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.navLink {
+    text-decoration: none;
+    color: #004d7a;
+    font-weight: 500;
+}
+
+.active {
+    color: #0077b6;
+}
+
+.usuarioLogueado {
+    font-weight: bold;
+}
+
+.btnLogout {
+    background: #0077b6;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
