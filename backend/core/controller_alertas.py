@@ -1,5 +1,6 @@
 from core.db.connection import get_connection
 from psycopg2.extras import RealDictCursor
+from core.auditoria_utils import registrar_auditoria_global
 
 def obtener_alertas_controller():
     """
@@ -40,9 +41,6 @@ def obtener_mis_reportes_controller(id_vigilante):
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         
-        # Seleccionamos alertas y si tienen acceso asociado, traemos la fecha.
-        # Si es novedad general (id_acceso NULL), usamos una fecha aproximada o de creación si existiera
-        # (Como alerta no tiene fecha propia, dependemos del acceso. Para generales, quedará sin fecha o NULL)
         query = """
             SELECT 
                 al.id_alerta,
@@ -63,9 +61,9 @@ def obtener_mis_reportes_controller(id_vigilante):
     finally:
         if conn: conn.close()
 
-def eliminar_alerta_controller(id_alerta):
+def eliminar_alerta_controller(id_alerta, vigilante_id=None):
     """
-    Elimina una alerta de la base de datos (Acción 'Resolver').
+    Elimina una alerta de la base de datos (Acción 'Resolver') y registra auditoría.
     """
     conn = None
     try:
@@ -73,6 +71,17 @@ def eliminar_alerta_controller(id_alerta):
         cursor = conn.cursor()
         cursor.execute("DELETE FROM alerta WHERE id_alerta = %s", (id_alerta,))
         conn.commit()
+        
+        # Auditoría opcional
+        if vigilante_id:
+            registrar_auditoria_global(
+                id_usuario=vigilante_id,
+                entidad="ALERTA",
+                id_entidad=id_alerta,
+                accion="ELIMINACION_ALERTA",
+                datos_nuevos={"id_alerta": id_alerta, "accion": "Eliminada"}
+            )
+        
         return True
     except Exception as e:
         print(f"Error eliminando alerta: {e}")
