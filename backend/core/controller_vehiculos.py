@@ -2,13 +2,13 @@
 # Lógica de negocio para el CRUD de Vehiculos (Alineado con bd_carros.sql)
 
 import json
-from backend.models.vehiculo import Vehiculo # CORREGIDO: Importación de modelo
+from models.vehiculo import Vehiculo # CORREGIDO: Importación de modelo
 from core.db.connection import get_connection
 from psycopg2.extras import RealDictCursor # IMPORTANTE: Para cursores de diccionario en Psycopg2
 
 # Importamos la función de auditoría
 from core.controller_personas import _registrar_auditoria 
-from backend.core.auditoria_utils import registrar_auditoria_global
+from core.auditoria_utils import registrar_auditoria_global
 
 # --- Funciones del CRUD de Vehiculos (Corregido) ---
 
