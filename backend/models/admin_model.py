@@ -1,4 +1,4 @@
-from backend.core.db.connection import get_connection
+from core.db.connection import get_connection
 
 def obtener_datos_dashboard():
     """Resumen de datos generales para administrador"""
