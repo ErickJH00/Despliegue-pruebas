@@ -506,7 +506,11 @@ def validar_acceso_ocr():
     try:
         # Pasamos el cuerpo crudo como espera tu función
         # Asumimos ID vigilante 1 por defecto si no hay token
-        respuesta, status = procesar_validacion_acceso(request.data, vigilante_id=1)
+        respuesta, status = procesar_validacion_acceso(
+                request.data,
+                vigilante_id=getattr(request, 'usuario_actual', {}).get('id_audit', 1)
+                )
+
         return jsonify(respuesta), status
     except Exception as e:
         return jsonify({"error": str(e)}), 500
