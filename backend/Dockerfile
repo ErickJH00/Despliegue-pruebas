@@ -9,6 +9,7 @@ WORKDIR /app
 # Copiar todo el contenido del backend al contenedor
 COPY . /app
 
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 ENV PORT=10000
