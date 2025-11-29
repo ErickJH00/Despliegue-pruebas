@@ -1,25 +1,20 @@
 # ============================================================
 # Dockerfile - Backend SmartCar (Flask)
 # ============================================================
+# Usar Python 3.11 slim
+FROM python:3.11-slim
 
-FROM python:3.10-slim
-
-# Crear directorio dentro del contenedor
+# Directorio de la app dentro del contenedor
 WORKDIR /app
 
-# Copiar requirements primero para cache eficiente
-COPY requirements.txt .
+# Copiar todo el backend al contenedor
+COPY backend/ /app
 
-# Instalar dependencias del backend
+# Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el resto del backend
-COPY . .
+# Puerto que Render asigna
+ENV PORT=10000
 
-# Render usa PORT, así que lo respetamos
-ENV PORT=5000
-
-EXPOSE 5000
-
-# Ejecutar el servidor
+# Comando de inicio
 CMD ["python", "server.py"]
