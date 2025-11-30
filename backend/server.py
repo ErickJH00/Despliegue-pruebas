@@ -443,5 +443,16 @@ def validar_acceso_ocr():
 @token_requerido
 def get_alertas():
     try:
-        return jsonify({"alertas": []})
+        alertas = []  # Placeholder: lista vacía o datos de prueba
+
+        return jsonify({
+            "status": "success",
+            "alertas": alertas
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 501
 
