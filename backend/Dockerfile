@@ -28,7 +28,8 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Copiar todo el backend al contenedor
 COPY backend /app/backend
-COPY server.py /app/server.py
+COPY backend/server.py /app/server.py
+
 
 # Render asignará este puerto
 ENV PORT=10000
