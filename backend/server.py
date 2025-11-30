@@ -443,4 +443,5 @@ def validar_acceso_ocr():
 @token_requerido
 def get_alertas():
     try:
-        alertas...
+        return jsonify({"alertas": []})
+
